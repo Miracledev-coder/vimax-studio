@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+USERS_PRIVATE.txt
+.venv/
+venv/
+outputs/
+.working_dir/

@@ -1,0 +1,6 @@
+USERS_PRIVATE.txt
+.venv
+venv
+outputs
+__pycache__
+.git

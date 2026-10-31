@@ -1,0 +1,60 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>ViMax Studio by Calm Craze Creatives</title>
+<link rel=icon href="/static/favicon.svg"><link rel=apple-touch-icon href="/static/icon-192.png"><meta name=theme-color content="#0b0a1a"><link rel=stylesheet href="/static/cc-theme.css">
+<style>.cc-chip.na{opacity:.75}.cc-note{margin-top:10px;padding:10px 14px;border-radius:12px;background:#a855f71a;border:1px solid #a855f744;color:var(--mut);font-size:13px;display:none}.cc-note b{color:var(--ink)}
+.cc-models{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin-top:12px}.cc-m{text-align:left;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-size:13px;cursor:pointer}.cc-m small{display:block;color:var(--dim);font-size:11.5px;margin-top:2px}.cc-m.on{border-color:var(--acc);background:#a855f71a}.cc-m .tag{float:right;font-size:10.5px;padding:2px 7px;border-radius:99px;background:var(--surface);color:var(--dim)}.cc-m .tag.ok{background:#22c55e22;color:#86efac}</style></head><body>
+<div class=cc-shell>{{SHELL}}<div>{{HEADER}}
+<main class=cc-main id=create>
+<h1 class=cc-h1>What story should we film?</h1><p class=cc-sub>Describe an idea or paste a screenplay. ViMax writes the shots, draws consistent characters, and renders a multi-shot video.</p>
+<div style="text-align:center"><div class=cc-tabs id=mode><button class=on data-v=idea>Idea → Video</button><button data-v=script>Script → Video</button></div></div>
+<div class=cc-prompt>
+<textarea id=prompt placeholder="e.g. A shy girl in Lagos finds a stray kitten on a rainy evening and brings it home"></textarea>
+<div class=cc-bar>
+<label class=cc-chip title="Model"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.5 5.5L20 11l-5.5 2.5L12 19l-2.5-5.5L4 11l5.5-2.5z"/></svg><select id=model></select></label>
+<label class=cc-chip title="Aspect ratio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/></svg><select id=aspect><option>16:9</option><option>9:16</option><option>1:1</option></select></label>
+<label class=cc-chip title="Clip duration"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><select id=dur></select></label>
+<label class=cc-chip title="Resolution"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 15V9l2 3 2-3v6M14 9v6h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2z"/></svg><select id=res></select></label>
+<label class=cc-chip title="Number of shots"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3"/></svg><select id=shots><option value=2>2 shots</option><option value=4 selected>4 shots</option><option value=6>6 shots</option></select></label>
+<button class=cc-btn id=go>✦ Generate</button></div>
+<div class=cc-note id=na></div>
+<details class=cc-adv><summary>Advanced settings</summary>
+<div class=cc-models id=models></div>
+<div class=cc-grid2>
+<div class=cc-field><label>Visual style</label><input id=style value="Realistic, warm feel"></div>
+<div class=cc-field><label>Image candidates per frame</label><select id=cand><option value=1>1 (cheapest)</option><option value=2>2</option><option value=3>3</option><option value=4>4 (best pick)</option></select></div>
+<div class=cc-field style="grid-column:1/-1"><label>Extra requirements (scenes, audience, tone)</label><input id=req placeholder="Default: 1 scene, chosen number of shots"></div>
+</div><p style="color:var(--dim);font-size:12px;margin:12px 0 0">Each shot is one paid video clip. Seedance 1.0 Fast ≈ $0.10 per 5s clip · Seedance 2.0 ≈ $0.76 · 2.5 ≈ $2.84 · Omni Flash ≈ $0.10/second.</p></details></div>
+<div class=cc-err id=msg style="text-align:center;margin-top:12px;font-size:14px"></div>
+<div class=cc-sec id=gallery><h2>My videos</h2><span>One video at a time · usually 5–20 min</span></div>
+<div class=cc-gallery id=grid></div>
+</main></div></div>
+<script>
+const $=id=>document.getElementById(id);let mode='idea',M=[];
+function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+$('mode').querySelectorAll('button').forEach(b=>b.onclick=()=>{$('mode').querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');mode=b.dataset.v;$('prompt').placeholder=mode=='idea'?'e.g. A shy girl in Lagos finds a stray kitten on a rainy evening and brings it home':'Paste your screenplay: scene headings, action and dialogue…';$('prompt').style.minHeight=mode=='idea'?'96px':'180px'});
+function pick(id){const m=M.find(x=>x.id==id);if(!m)return;$('model').value=id;
+ const o=(sel,arr,fmt)=>{const v=$(sel).value;$(sel).innerHTML=arr.map(x=>`<option value="${x}">${fmt(x)}</option>`).join('');if(arr.map(String).includes(v))$(sel).value=v;else if(arr.includes('720p'))$(sel).value='720p'};
+ o('res',m.res,x=>x);o('dur',m.dur,x=>x+'s / shot');
+ document.querySelectorAll('.cc-m').forEach(b=>b.classList.toggle('on',b.dataset.id==id));
+ $('model').parentElement.classList.toggle('na',!!m.unavailable);
+ $('na').style.display=m.unavailable?'block':'none';$('na').innerHTML=m.unavailable?`<b>${esc(m.label)}</b> · ${esc(m.unavailable)}`:'';
+ $('go').disabled=!!m.unavailable;$('go').textContent=m.unavailable?'Not available yet':'✦ Generate'}
+async function loadModels(){const r=await fetch('/api/models');if(r.status==401){location.reload();return}M=await r.json();
+ $('model').innerHTML=M.map(m=>`<option value="${m.id}">${esc(m.label)}${m.unavailable?' (soon)':''}</option>`).join('');
+ $('models').innerHTML=M.map(m=>`<button type=button class=cc-m data-id="${m.id}"><span class="tag${m.unavailable?'':' ok'}">${m.unavailable?'Not available yet':'Ready'}</span>${esc(m.label)}<small>${esc(m.note)}</small></button>`).join('');
+ document.querySelectorAll('.cc-m').forEach(b=>b.onclick=()=>pick(b.dataset.id));
+ $('model').onchange=()=>pick($('model').value);pick((M.find(m=>!m.unavailable)||M[0]).id)}
+function card(j){const wide=j.aspect=='9:16'?'':' wide';let m;
+ if(j.status=='done')m=`<video controls playsinline preload=metadata src="/video/${j.id}"></video>`;
+ else if(j.status=='error')m=`<div class=cc-prog><div class=cc-err>Couldn't finish</div><div>${esc(j.error)}</div></div>`;
+ else m=`<div class=cc-prog><div class=cc-ring></div><div>${esc(j.stage||'Working')}…</div><div>${Math.floor((j.elapsed||0)/60)}m ${(j.elapsed||0)%60}s</div></div>`;
+ const links=(j.status=='done'?`<a class=cc-dl href="/video/${j.id}?dl=1">Download</a>`:'')+(j.has_zip?` <a class=cc-dl href="/assets/${j.id}">Assets</a>`:'');
+ return `<div class=cc-card><div class="media${wide}">${m}</div><div class=meta><b title="${esc(j.title)}">${esc(j.title)}</b><div class=row><span>${esc(j.model)}</span><span>${links}</span></div></div></div>`}
+let last='';async function refresh(){const r=await fetch('/api/history');if(r.status==401){location.reload();return}const d=await r.json();
+ const key=JSON.stringify(d);if(key!=last){last=key;$('grid').innerHTML=d.length?d.map(card).join(''):'<div class=cc-empty>Your generated videos will appear here.</div>'}
+ setTimeout(refresh,d.some(j=>j.status=='queued'||j.status=='running')?4000:20000)}
+$('go').onclick=async()=>{const t=$('prompt').value.trim();$('msg').textContent='';if(!t){$('msg').textContent='Describe your idea or paste a script first.';return}
+ const b={mode,text:t,model:$('model').value,aspect:$('aspect').value,dur:+$('dur').value,res:$('res').value,shots:+$('shots').value,style:$('style').value,candidates:+$('cand').value,requirement:$('req').value};
+ $('go').disabled=true;const r=await fetch('/api/generate',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(b)});const d=await r.json();$('go').disabled=false;
+ if(!r.ok){$('msg').textContent=d.error||'Something went wrong.';return}$('prompt').value='';last='';refresh();$('gallery').scrollIntoView({behavior:'smooth'})};
+loadModels();refresh();
+</script></body></html>

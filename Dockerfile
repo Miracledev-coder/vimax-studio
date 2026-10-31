@@ -6,4 +6,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 ENV PYTHONUNBUFFERED=1 PORT=7860
 EXPOSE 7860
-CMD ["python", "app.py"]
+CMD ["python", "studio/server.py"]

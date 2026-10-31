@@ -44,8 +44,10 @@ class VideoGeneratorOpenRouterAPI:
         base_url: str = "https://openrouter.ai/api/v1",
         http_referer: str = "",
         app_title: str = "ViMax",
+        rate_limiter=None,
     ):
         self.api_key = api_key
+        self.rate_limiter = rate_limiter
         self.model = model
         self.base_url = base_url.rstrip("/")
         self.http_referer = http_referer

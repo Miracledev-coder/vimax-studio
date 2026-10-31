@@ -7,6 +7,7 @@ from .image_generator_doubao_seedream_yunwu_api import ImageGeneratorDoubaoSeedr
 from .image_generator_nanobanana_google_api import ImageGeneratorNanobananaGoogleAPI
 from .image_generator_nanobanana_yunwu_api import ImageGeneratorNanobananaYunwuAPI
 from .image_generator_openrouter_api import ImageGeneratorOpenRouterAPI
+from .image_generator_seedream_byteplus_api import ImageGeneratorSeedreamBytePlusAPI
 
 # reranker for rag
 from .reranker_bge_silicon_api import RerankerBgeSiliconapi
@@ -16,6 +17,8 @@ from .video_generator_doubao_seedance_yunwu_api import VideoGeneratorDoubaoSeeda
 from .video_generator_omni_yunwu_api import VideoGeneratorOmniYunwuAPI, VideoGeneratorOminiYunwuAPI
 from .video_generator_openrouter_api import VideoGeneratorOpenRouterAPI
 from .video_generator_veo_google_api import VideoGeneratorVeoGoogleAPI
+from .video_generator_omni_google_api import VideoGeneratorOmniGoogleAPI
+from .video_generator_seedance_byteplus_api import VideoGeneratorSeedanceBytePlusAPI
 from .video_generator_veo_yunwu_api import VideoGeneratorVeoYunwuAPI
 
 
@@ -27,11 +30,14 @@ __all__ = [
     "ImageGeneratorNanobananaGoogleAPI",
     "ImageGeneratorNanobananaYunwuAPI",
     "ImageGeneratorOpenRouterAPI",
+    "ImageGeneratorSeedreamBytePlusAPI",
     "RerankerBgeSiliconapi",
     "VideoGeneratorDoubaoSeedanceYunwuAPI",
     "VideoGeneratorOmniYunwuAPI",
     "VideoGeneratorOminiYunwuAPI",
     "VideoGeneratorOpenRouterAPI",
     "VideoGeneratorVeoGoogleAPI",
+    "VideoGeneratorOmniGoogleAPI",
+    "VideoGeneratorSeedanceBytePlusAPI",
     "VideoGeneratorVeoYunwuAPI",
 ]

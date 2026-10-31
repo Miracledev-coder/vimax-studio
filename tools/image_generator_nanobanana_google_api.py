@@ -21,7 +21,7 @@ class ImageGeneratorNanobananaGoogleAPI:
         api_key: str,
         rate_limiter: Optional[RateLimiter] = None,
     ):
-        self.model = "gemini-2.5-flash-image"
+        self.model = "gemini-3.1-flash-lite-image"
         self.rate_limiter = rate_limiter
         self.client = genai.Client(
             api_key=api_key,
@@ -66,7 +66,7 @@ class ImageGeneratorNanobananaGoogleAPI:
                 )
                 break
             except ClientError as e:
-                if e.status_code == 429 and attempt < max_retries - 1:
+                if getattr(e, "code", None) == 429 and attempt < max_retries - 1:
                     wait_time = retry_delay * (2 ** attempt)
                     logging.warning(f"Rate limit hit (429), retrying in {wait_time}s... (attempt {attempt + 1}/{max_retries})")
                     await asyncio.sleep(wait_time)
